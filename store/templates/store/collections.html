@@ -1,0 +1,37 @@
+{% extends 'store/layouts/main.html' %}
+{% block css%}
+.category-image{
+    width:"200px";
+    height:"200px";
+}
+
+{% endblock css%}
+{% block content %}
+<div class="py-3 bg-primary">
+    <div class="container">
+        <a class="text-white" href="{% url 'home' %}"> Home</a> / <a class="text-white" href="{% url 'collections' %}">collections</a> 
+</div>
+
+</div>
+<div class="container">
+  <div class="row">
+  {% for item in category %}
+  <div class="col-sm-3"> 
+    <div class="card mt-2">
+      <a href="{% url 'collectionsview' item.slug %}">
+        <img src="{{ item.image.url }}" alt="Card image cap" height="250px" width="250px"  />
+        <div class="card-block">
+            <h4 class="card-title text-center">{{item.name}}</h4>
+            {% comment %} <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p> {% endcomment %}
+            {% comment %} <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p> {% endcomment %}
+        </div>
+      </a>
+    </div>
+</div>
+  {% endfor %}
+</div>
+</div>
+{% endblock content %}
+      
+
+ 

@@ -1,0 +1,112 @@
+{% extends 'store/layouts/main.html' %}
+{% block content %}
+<div class="py-3 bg-primary">
+    <div class="container">
+        <a class="text-white" href="{% url 'home' %}"> Home</a> /
+         <a class="text-white" href="{% url 'checkout' %}">Checkout</a> 
+</div>
+</div>
+<div class="container mt-4">
+    <form action="{% url 'placeorder' %}" method="POST">
+        {% csrf_token %}
+        <div class="row">
+          <div class="col-md-7">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h6> Basic Details</h6>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6 ">
+                        <label>First name</label>
+                        <input type="text" class="form-control" value="{{ request.user.first_name }}" required name="fname" placeholder="Enter the first name: ">
+                        </div>
+                        <div class="col-md-6 ">
+                            <label>Last name</label>
+                            <input type="text" class="form-control" value="{{ request.user.last_name }}" required  name="lname" placeholder="Enter the Last name: ">
+                        </div>
+                        <div class="col-md-6 ">
+                            <label>Phone No.</label>
+                            <input type="text" class="form-control"  required value="{{ userprofile.phone }}"  name="phone" placeholder="Enter the phone No.: ">
+                        </div>
+                        <div class="col-md-6 ">
+                            <label>Email</label>
+                            <input type="email" class="form-control" required  value="{{ request.user.email }}" name="email" placeholder="Enter your Email: ">
+                        </div>
+                        <div class="col-md-12">
+                            <label>Address</label>
+                            <textarea type="textfield" class="form-control" required  name="address" placeholder="Enter the Address: ">{{ userprofile.address}}</textarea>
+                        </div>
+                        <div class="col-md-6 ">
+                            <label>City</label>
+                            <input type="text" class="form-control" value="{{ userprofile.city }}" required name="city" placeholder="Enter your City: ">
+                        </div>
+                        <div class="col-md-6 ">
+                            <label>State</label>
+                            <input type="text" class="form-control" value="{{ userprofile.state }}" required name="state" placeholder="Enter your State: ">
+                        </div>
+                        <div class="col-md-6  ">
+                            <label>Country</label>
+                            <input type="text" class="form-control" required value="{{ userprofile.country }}" name="country" placeholder="Enter your Country: ">
+                        </div>
+                        <div class="col-md-6 ">
+                            <label>Pincode</label>
+                            <input type="text" class="form-control" value="{{ userprofile.pincode }}" required name="pincode" placeholder="Enter your Pincode ">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h6>Order Summary</h6>
+                    <hr>
+                    {% if cartitems %}
+                        <table class="table table-stripeds table-bordereds"> 
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Product Name</th>
+                                    <th>Qty</th>
+                                    <th>Price</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in cartitems %}
+                                <tr>
+                                    <td><img src="{{ item.product.product_image.url }}" height="50px" class="me-2" width="50px"></td>
+                                    <td>{{ item.product.name}}</td>
+                                    <td>{{ item.product_pty }}</td>
+                                    <td>{{ item.product.selling_price | stringformat:'d'}}<td>
+                                </tr>
+                            </tbody>
+                                {% endfor %}
+                        </table>
+                        <h6 class="fw-bold">Grand Total
+                            <span class="float-end">Rs.{{ total_price | stringformat:'d'}}</span>
+                        </h6>
+                        <input type="hidden" value="COD" name="payment_mode">
+                        <div class="mt-3">
+                            <button  type="submit" class="btn btn-success w-100">Cash On delivery</button>
+                        </div>
+                        <div class="mt-3">
+                            <button  type="button" class="btn btn-primary paywithrazor w-100">Pay with RazorPay</button>
+                        </div>
+                            {% else %}
+                        </h4>Your cart is empty</h4>
+
+                            {% endif %}
+                </div>
+            </div>
+        </div>
+    
+    </div>
+</form>
+</div>
+
+{% endblock content %}
+{% block scripts %}
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+{% endblock scripts %}
